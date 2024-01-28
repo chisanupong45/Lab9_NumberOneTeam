@@ -1,29 +1,19 @@
-# NumberOne Team
+# วิธีการรันโปรเจค
 
-## SC313004 Software Engineering Sec.1
+ตามขั้นตอนด้านล่างนี้:
 
-## Member
+1. ทำการ clone โปรเจคจาก GitHub โดยใช้คำสั่ง:
 
-1. นายรัตนชัย ทีฆะทิพย์สกุล 623020489-8 [rattanachaikku](https://github.com/rattanachaikku)
+```
+git clone https://github.com/chisanupong45/Lab9_NumberOneTeam.git
+```
 
-   > ![Rattanachai](team_img/picture_student.png)
+2. เปิด Terminal หรือ Command Prompt(cmd) และเข้าไดเรกทอรีเข้าโปรเจค
 
-2. นายสัทธาทร สุกใส 643020056-1 [5atthaThorn](https://github.com/5atthaThorn)
+3. รัน Docker Compose:
 
-   > <img src="team_img/satthathornphoto.jpg" alt="Satthathorn" width="200"/>
+```
+docker-compose up
+```
 
-3. นายชิษณุพงศ์ พิณทอง 643020472-7	 [chisanupong45](https://github.com/chisanupong45)
-
-   > <img src="team_img/chisanupong.jpg" alt="Chisanupong" width="200"/>
-   
-4. นางสาวปริญญาภรณ์ แสงโนลาด  643020483-2 [parinyap03](https://github.com/parinyap03)
-
-   > ![Parinyaporn](team_img/parinyaporn.jpg)
-   
-5. นางสาวโชติกา เอี่ยมสอาด 643021222-5 [Chotika14](https://github.com/Chotika14)
-   > ![Chotika](team_img/chotika.jpg)
-
-6. นายทักษิณ แก้วกงพาน 643021230-6 [Bastaks](https://github.com/Bastaks)	
-   > <img src="team_img/taksin.jpg" alt="Taksin" width="200"/>
-
-
+4. ไปที่ URL: http://localhost:8080/install-ps/ เพื่อติดตั้ง Project
