@@ -28,7 +28,7 @@ docker-compose up
 1. ไปที่ URL: http://localhost:8081/
 2. ใส่ Username เป็น "root"
 3. ใส่ Password เป็น "admin"
-4. คลิก "Go" เพื่อเข้าสู่ระบบ
+4. คลิก "Login" เพื่อเข้าสู่ระบบ
 
 สำหรับการเข้าถึงเว็บไซต์หลัก:
 
