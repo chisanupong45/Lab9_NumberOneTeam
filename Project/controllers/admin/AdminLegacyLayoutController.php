@@ -168,14 +168,16 @@ class AdminLegacyLayoutControllerCore extends AdminController
         $this->page_header_toolbar_btn = array_merge($this->page_header_toolbar_btn, $this->headerToolbarBtn);
     }
 
+    /**
+     * AdminController::initContent() override.
+     *
+     * @see AdminController::initContent()
+     */
     public function initContent()
     {
         $this->addHeaderToolbarBtn();
 
         $this->show_page_header_toolbar = (bool) $this->showContentHeader;
-
-        // @todo remove once the product page has been made responsive
-        $isProductPage = ('AdminProducts' === $this->controller_name);
 
         $vars = [
             'maintenance_mode' => !(bool) Configuration::get('PS_SHOP_ENABLE'),
@@ -200,6 +202,7 @@ class AdminLegacyLayoutControllerCore extends AdminController
             'use_regular_h1_structure' => $this->useRegularH1Structure,
             // legacy context selector is hidden on migrated pages when multistore feature is used
             'hideLegacyStoreContextSelector' => $this->isMultistoreEnabled(),
+            'locked_to_all_shop_context' => $this->lockedToAllShopContext,
         ];
 
         if ($this->helpLink === false || !empty($this->helpLink)) {

@@ -453,7 +453,7 @@ class AdminCustomerThreadsControllerCore extends AdminController
                     $params = [
                         '{reply}' => Tools::nl2br(Tools::htmlentitiesUTF8(Tools::getValue('reply_message'))),
                         '{link}' => Tools::url(
-                            $this->context->link->getPageLink('contact', true, null, null, false, $ct->id_shop),
+                            $this->context->link->getPageLink('contact', null, null, null, false, $ct->id_shop),
                             'id_customer_thread=' . (int) $ct->id . '&token=' . $ct->token
                         ),
                         '{firstname}' => $customer->firstname,
@@ -510,6 +510,11 @@ class AdminCustomerThreadsControllerCore extends AdminController
         return parent::postProcess();
     }
 
+    /**
+     * AdminController::initContent() override.
+     *
+     * @see AdminController::initContent()
+     */
     public function initContent()
     {
         if (isset($_GET['filename'])) {
@@ -847,7 +852,7 @@ class AdminCustomerThreadsControllerCore extends AdminController
         return $timeline;
     }
 
-    protected function displayMessage($message, $email = false, $id_employee = null)
+    protected function displayMessage(array $message, string|bool $email = false, int $id_employee = null)
     {
         $tpl = $this->createTemplate('message.tpl');
 
@@ -901,7 +906,7 @@ class AdminCustomerThreadsControllerCore extends AdminController
         return $tpl->fetch();
     }
 
-    protected function displayButton($content)
+    protected function displayButton(string $content)
     {
         return '<div><p>' . $content . '</p></div>';
     }

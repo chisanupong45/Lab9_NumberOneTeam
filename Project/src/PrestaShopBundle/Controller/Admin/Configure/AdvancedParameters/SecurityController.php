@@ -47,7 +47,7 @@ use PrestaShop\PrestaShop\Core\Form\FormHandlerInterface;
 use PrestaShop\PrestaShop\Core\Search\Filters\Security\Session\CustomerFilters;
 use PrestaShop\PrestaShop\Core\Search\Filters\Security\Session\EmployeeFilters;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
-use PrestaShopBundle\Security\Annotation\AdminSecurity;
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,10 +61,9 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Show sessions listing page.
      *
-     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))")
-     *
      * @return Response
      */
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))")]
     public function indexAction(Request $request): Response
     {
         $generalForm = $this->getGeneralFormHandler()->getForm();
@@ -92,14 +91,11 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Process the Security general configuration form.
      *
-     * @AdminSecurity(
-     *     "is_granted('update', request.get('_legacy_controller')) && is_granted('create', request.get('_legacy_controller')) && is_granted('delete', request.get('_legacy_controller'))"
-     * )
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller')) && is_granted('create', request.get('_legacy_controller')) && is_granted('delete', request.get('_legacy_controller'))")]
     public function processGeneralFormAction(Request $request): RedirectResponse
     {
         return $this->processForm(
@@ -112,14 +108,11 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Process the Security password policy configuration form.
      *
-     * @AdminSecurity(
-     *     "is_granted('update', request.get('_legacy_controller')) && is_granted('create', request.get('_legacy_controller')) && is_granted('delete', request.get('_legacy_controller'))"
-     * )
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller')) && is_granted('create', request.get('_legacy_controller')) && is_granted('delete', request.get('_legacy_controller'))")]
     public function processPasswordPolicyFormAction(Request $request): RedirectResponse
     {
         return $this->processForm(
@@ -167,12 +160,11 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Show Employees sessions listing page.
      *
-     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))")
-     *
      * @param EmployeeFilters $filters
      *
      * @return Response
      */
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))")]
     public function employeeSessionAction(Request $request, EmployeeFilters $filters): Response
     {
         $sessionsEmployeesGridFactory = $this->get('prestashop.core.grid.factory.security.session.employee');
@@ -182,7 +174,7 @@ class SecurityController extends FrameworkBundleAdminController
             [
                 'enableSidebar' => true,
                 'help_link' => $this->generateSidebarLink($request->attributes->get('_legacy_controller')),
-                'layoutTitle' => $this->trans('Employee Sessions', 'Admin.Navigation.Menu'),
+                'layoutTitle' => $this->trans('Employee sessions', 'Admin.Navigation.Menu'),
                 'grid' => $this->presentGrid($sessionsEmployeesGridFactory->getGrid($filters)),
                 'multistoreInfoTip' => $this->trans(
                     'Note that this page is available in all shops context only, this is why your context has just switched.',
@@ -197,12 +189,11 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Show Customers sessions listing page.
      *
-     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))")
-     *
      * @param CustomerFilters $filters
      *
      * @return Response
      */
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))")]
     public function customerSessionAction(Request $request, CustomerFilters $filters): Response
     {
         $sessionsCustomersGridFactory = $this->get('prestashop.core.grid.factory.security.session.customer');
@@ -212,7 +203,7 @@ class SecurityController extends FrameworkBundleAdminController
             [
                 'enableSidebar' => true,
                 'help_link' => $this->generateSidebarLink($request->attributes->get('_legacy_controller')),
-                'layoutTitle' => $this->trans('Customer Sessions', 'Admin.Navigation.Menu'),
+                'layoutTitle' => $this->trans('Customer sessions', 'Admin.Navigation.Menu'),
                 'grid' => $this->presentGrid($sessionsCustomersGridFactory->getGrid($filters)),
                 'multistoreInfoTip' => $this->trans(
                     'Note that this page is available in all shops context only, this is why your context has just switched.',
@@ -225,10 +216,9 @@ class SecurityController extends FrameworkBundleAdminController
     }
 
     /**
-     * @AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")
-     *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")]
     public function clearCustomerSessionAction(): RedirectResponse
     {
         try {
@@ -245,10 +235,9 @@ class SecurityController extends FrameworkBundleAdminController
     }
 
     /**
-     * @AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")
-     *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")]
     public function clearEmployeeSessionAction(): RedirectResponse
     {
         try {
@@ -267,12 +256,11 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Delete an employee session.
      *
-     * @AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")
-     *
      * @param int $sessionId
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")]
     public function deleteEmployeeSessionAction(int $sessionId): RedirectResponse
     {
         try {
@@ -291,12 +279,11 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Delete a customer session.
      *
-     * @AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")
-     *
      * @param int $sessionId
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")]
     public function deleteCustomerSessionAction(int $sessionId): RedirectResponse
     {
         try {
@@ -315,15 +302,14 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Bulk delete customer session.
      *
-     * @AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")]
     public function bulkDeleteCustomerSessionAction(Request $request): RedirectResponse
     {
-        $sessionIds = $request->request->get('security_session_customer_bulk');
+        $sessionIds = $request->request->all('security_session_customer_bulk');
 
         try {
             $deleteSessionsCommand = new BulkDeleteCustomerSessionsCommand($sessionIds);
@@ -341,15 +327,14 @@ class SecurityController extends FrameworkBundleAdminController
     /**
      * Bulk delete employee session.
      *
-     * @AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))")]
     public function bulkDeleteEmployeeSessionAction(Request $request): RedirectResponse
     {
-        $sessionIds = $request->request->get('security_session_employee_bulk');
+        $sessionIds = $request->request->all('security_session_employee_bulk');
 
         try {
             $deleteSessionsCommand = new BulkDeleteEmployeeSessionsCommand($sessionIds);

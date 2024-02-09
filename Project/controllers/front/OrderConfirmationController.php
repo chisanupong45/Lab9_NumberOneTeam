@@ -85,7 +85,7 @@ class OrderConfirmationControllerCore extends FrontController
         // This data is kept only for backward compatibility purposes
         $this->reference = (string) $this->order->reference;
 
-        $redirectLink = $this->context->link->getPageLink('history', $this->ssl);
+        $redirectLink = $this->context->link->getPageLink('history');
 
         // The confirmation link must contain a unique order secure key matching the key saved in database,
         // this prevents user to view other customer's order confirmations
@@ -218,7 +218,7 @@ class OrderConfirmationControllerCore extends FrontController
             'HOOK_PAYMENT_RETURN' => $this->displayPaymentReturn($this->order),
             'order' => (new OrderPresenter())->present($this->order),
             'order_customer' => $this->objectPresenter->present($this->customer),
-            'registered_customer_exists' => Customer::customerExists($this->customer->email, false, true),
+            'registered_customer_exists' => Customer::customerExists($this->customer->email),
         ]);
         $this->setTemplate('checkout/order-confirmation');
 
@@ -231,7 +231,7 @@ class OrderConfirmationControllerCore extends FrontController
     /**
      * Execute the hook displayPaymentReturn.
      */
-    public function displayPaymentReturn($order)
+    public function displayPaymentReturn(Order $order)
     {
         if (!Validate::isUnsignedId($this->id_module)) {
             return false;
@@ -244,7 +244,7 @@ class OrderConfirmationControllerCore extends FrontController
     /**
      * Execute the hook displayOrderConfirmation.
      */
-    public function displayOrderConfirmation($order)
+    public function displayOrderConfirmation(Order $order)
     {
         return Hook::exec('displayOrderConfirmation', ['order' => $order]);
     }
@@ -286,7 +286,17 @@ class OrderConfirmationControllerCore extends FrontController
         // note the id_module parameter with value -1
         // it acts as a marker for the module check to use "free_payment"
         // for the check
-        Tools::redirect('index.php?controller=order-confirmation&id_cart=' . (int) $cart->id . '&id_module=-1&id_order=' . (int) $order->currentOrder . '&key=' . $cart->secure_key);
+        Tools::redirect($this->context->link->getPageLink(
+            'order-confirmation',
+            null,
+            null,
+            [
+                'id_cart' => (int) $cart->id,
+                'id_module' => '-1',
+                'id_order' => (int) $order->currentOrder,
+                'key' => $cart->secure_key,
+            ]
+        ));
     }
 
     public function getBreadcrumbLinks()

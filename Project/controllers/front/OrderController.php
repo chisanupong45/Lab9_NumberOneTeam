@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -99,7 +98,7 @@ class OrderControllerCore extends FrontController
                 $context->cart = $duplication['cart'];
                 CartRule::autoAddToCart($context);
                 $this->context->cookie->write();
-                Tools::redirect('index.php?controller=order');
+                Tools::redirect($this->context->link->getPageLink('order'));
             }
         }
 
@@ -241,6 +240,11 @@ class OrderControllerCore extends FrontController
         $this->ajaxRender(json_encode($responseData));
     }
 
+    /**
+     * Assign template vars related to page content.
+     *
+     * @see FrontController::initContent()
+     */
     public function initContent()
     {
         if (Configuration::isCatalogMode()) {
@@ -350,7 +354,7 @@ class OrderControllerCore extends FrontController
             return false;
         }
 
-        $link = $this->context->link->getCMSLink($cms, $cms->link_rewrite, (bool) Configuration::get('PS_SSL_ENABLED'));
+        $link = $this->context->link->getCMSLink($cms, $cms->link_rewrite);
 
         $termsAndConditions = new TermsAndConditions();
         $termsAndConditions

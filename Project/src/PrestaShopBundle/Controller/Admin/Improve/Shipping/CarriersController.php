@@ -46,8 +46,8 @@ use PrestaShop\PrestaShop\Core\Grid\Position\GridPositionUpdaterInterface;
 use PrestaShop\PrestaShop\Core\Grid\Position\PositionUpdateFactoryInterface;
 use PrestaShop\PrestaShop\Core\Search\Filters\CarrierFilters;
 use PrestaShopBundle\Controller\Admin\FrameworkBundleAdminController;
-use PrestaShopBundle\Security\Annotation\AdminSecurity;
-use PrestaShopBundle\Security\Annotation\DemoRestricted;
+use PrestaShopBundle\Security\Attribute\AdminSecurity;
+use PrestaShopBundle\Security\Attribute\DemoRestricted;
 use PrestaShopBundle\Service\Grid\ResponseBuilder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -61,13 +61,12 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Show carriers listing page
      *
-     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))")
-     *
      * @param Request $request
      * @param CarrierFilters $filters
      *
      * @return Response
      */
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))")]
     public function indexAction(Request $request, CarrierFilters $filters): Response
     {
         $carrierGridFactory = $this->get('prestashop.core.grid.factory.carrier');
@@ -87,18 +86,18 @@ class CarriersController extends FrameworkBundleAdminController
             'isShowcaseCardClosed' => $showcaseCardIsClose,
             'layoutHeaderToolbarBtn' => $this->getLayoutHeaderToolbarButtons(),
             'enableSidebar' => true,
+            'layoutTitle' => $this->trans('Carriers', 'Admin.Navigation.Menu'),
         ]);
     }
 
     /**
      * Process Grid search.
      *
-     * @AdminSecurity("is_granted('read', request.get('_legacy_controller'))")
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('read', request.get('_legacy_controller'))")]
     public function searchAction(Request $request): RedirectResponse
     {
         /** @var ResponseBuilder $responseBuilder */
@@ -115,12 +114,11 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Redirect to carrier wizard for carrier editing.
      *
-     * @AdminSecurity("is_granted('update', request.get('_legacy_controller'))")
-     *
      * @param int $carrierId
      *
      * @return RedirectResponse
      */
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))")]
     public function editAction(int $carrierId): RedirectResponse
     {
         return $this->redirect($this->getAdminLink('AdminCarrierWizard', ['id_carrier' => $carrierId]));
@@ -129,16 +127,12 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Deletes carrier.
      *
-     * @AdminSecurity(
-     *     "is_granted('delete', request.get('_legacy_controller'))",
-     *     redirectRoute="admin_carriers_index",
-     * )
-     * @DemoRestricted(redirectRoute="admin_carriers_index")
-     *
      * @param int $carrierId
      *
      * @return RedirectResponse
      */
+    #[DemoRestricted(redirectRoute: 'admin_carriers_index')]
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_carriers_index')]
     public function deleteAction(int $carrierId): RedirectResponse
     {
         try {
@@ -154,18 +148,12 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Toggles carrier status.
      *
-     * @AdminSecurity(
-     *     "is_granted('update', request.get('_legacy_controller'))",
-     *     redirectRoute="admin_carriers_index",
-     *     message="You need permission to edit this."
-     * )
-     *
-     * @DemoRestricted(redirectRoute="admin_carriers_index")
-     *
      * @param int $carrierId
      *
      * @return RedirectResponse
      */
+    #[DemoRestricted(redirectRoute: 'admin_carriers_index')]
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_carriers_index', message: 'You need permission to edit this.')]
     public function toggleStatusAction(int $carrierId): RedirectResponse
     {
         try {
@@ -185,18 +173,12 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Toggles carrier is-free status
      *
-     * @AdminSecurity(
-     *     "is_granted('update', request.get('_legacy_controller'))",
-     *     redirectRoute="admin_carriers_index",
-     *     message="You need permission to edit this."
-     * )
-     *
-     * @DemoRestricted(redirectRoute="admin_carriers_index")
-     *
      * @param int $carrierId
      *
      * @return RedirectResponse
      */
+    #[DemoRestricted(redirectRoute: 'admin_carriers_index')]
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_carriers_index', message: 'You need permission to edit this.')]
     public function toggleIsFreeAction(int $carrierId): RedirectResponse
     {
         try {
@@ -216,22 +198,16 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Changes carrier position
      *
-     * @AdminSecurity(
-     *     "is_granted('update', request.get('_legacy_controller'))",
-     *     redirectRoute="admin_carriers_index",
-     *     message="You need permission to edit this."
-     * )
-     *
-     * @DemoRestricted(redirectRoute="admin_carriers_index")
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[DemoRestricted(redirectRoute: 'admin_carriers_index')]
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_carriers_index', message: 'You need permission to edit this.')]
     public function updatePositionAction(Request $request): RedirectResponse
     {
         $positionsData = [
-            'positions' => $request->request->get('positions'),
+            'positions' => $request->request->all('positions'),
         ];
 
         $positionDefinition = $this->get('prestashop.core.grid.carrier.position_definition');
@@ -253,16 +229,12 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Bulk deletes carriers.
      *
-     * @AdminSecurity(
-     *     "is_granted('delete', request.get('_legacy_controller'))",
-     *     redirectRoute="admin_carriers_index",
-     * )
-     * @DemoRestricted(redirectRoute="admin_carriers_index")
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[DemoRestricted(redirectRoute: 'admin_carriers_index')]
+    #[AdminSecurity("is_granted('delete', request.get('_legacy_controller'))", redirectRoute: 'admin_carriers_index')]
     public function bulkDeleteAction(Request $request): RedirectResponse
     {
         $carrierIds = $this->getCarrierIdsFromRequest($request);
@@ -283,16 +255,12 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Enables carrier status on bulk action.
      *
-     * @AdminSecurity(
-     *     "is_granted('update', request.get('_legacy_controller'))",
-     *     redirectRoute="admin_carriers_index",
-     * )
-     * @DemoRestricted(redirectRoute="admin_carriers_index")
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[DemoRestricted(redirectRoute: 'admin_carriers_index')]
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_carriers_index')]
     public function bulkEnableStatusAction(Request $request): RedirectResponse
     {
         $carrierIds = $this->getCarrierIdsFromRequest($request);
@@ -313,16 +281,12 @@ class CarriersController extends FrameworkBundleAdminController
     /**
      * Disables carrier status on bulk action.
      *
-     * @AdminSecurity(
-     *     "is_granted('update', request.get('_legacy_controller'))",
-     *     redirectRoute="admin_carriers_index",
-     * )
-     * @DemoRestricted(redirectRoute="admin_carriers_index")
-     *
      * @param Request $request
      *
      * @return RedirectResponse
      */
+    #[DemoRestricted(redirectRoute: 'admin_carriers_index')]
+    #[AdminSecurity("is_granted('update', request.get('_legacy_controller'))", redirectRoute: 'admin_carriers_index')]
     public function bulkDisableStatusAction(Request $request): RedirectResponse
     {
         $carrierIds = $this->getCarrierIdsFromRequest($request);
@@ -394,11 +358,7 @@ class CarriersController extends FrameworkBundleAdminController
      */
     private function getCarrierIdsFromRequest(Request $request): array
     {
-        $carrierIds = $request->request->get('carrier_bulk');
-
-        if (!is_array($carrierIds)) {
-            return [];
-        }
+        $carrierIds = $request->request->all('carrier_bulk');
 
         foreach ($carrierIds as $i => $carrierId) {
             $carrierIds[$i] = (int) $carrierId;

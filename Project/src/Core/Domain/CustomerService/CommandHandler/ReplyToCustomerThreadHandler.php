@@ -33,6 +33,7 @@ use CustomerMessage;
 use CustomerThread;
 use Language;
 use Mail;
+use PrestaShop\PrestaShop\Core\CommandBus\Attributes\AsCommandHandler;
 use PrestaShop\PrestaShop\Core\Domain\CustomerService\Command\ReplyToCustomerThreadCommand;
 use PrestaShop\PrestaShop\Core\Domain\CustomerService\Exception\CustomerServiceException;
 use PrestaShop\PrestaShop\Core\Domain\CustomerService\ValueObject\CustomerThreadStatus;
@@ -44,6 +45,7 @@ use Validate;
 /**
  * @internal
  */
+#[AsCommandHandler]
 class ReplyToCustomerThreadHandler implements ReplyToCustomerThreadHandlerInterface
 {
     /**
@@ -127,7 +129,7 @@ class ReplyToCustomerThreadHandler implements ReplyToCustomerThreadHandlerInterf
         $params = [
             '{reply}' => Tools::nl2br($customerMessage->message),
             '{link}' => Tools::url(
-                $this->context->link->getPageLink('contact', true, null, null, false, $customerThread->id_shop),
+                $this->context->link->getPageLink('contact', null, null, null, false, $customerThread->id_shop),
                 'id_customer_thread=' . (int) $customerThread->id . '&token=' . $customerThread->token
             ),
             '{firstname}' => $customer->firstname,

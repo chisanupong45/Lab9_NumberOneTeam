@@ -45,18 +45,11 @@ class ModuleCommand extends Command
         'uninstall',
         'enable',
         'disable',
-        'enableMobile',
-        'disableMobile',
         'reset',
         'upgrade',
         'configure',
         'delete',
     ];
-
-    /**
-     * @var FormatterHelper
-     */
-    protected $formatter;
 
     /**
      * @var TranslatorInterface
@@ -113,7 +106,6 @@ class ModuleCommand extends Command
 
     protected function init(InputInterface $input, OutputInterface $output)
     {
-        $this->formatter = $this->getHelper('formatter');
         $this->input = $input;
         $this->output = $output;
         //We need to have an employee or the module hooks don't work
@@ -217,8 +209,11 @@ class ModuleCommand extends Command
 
     protected function displayMessage($message, $type = 'info')
     {
+        /** @var FormatterHelper $formatter */
+        $formatter = $this->getHelper('formatter');
+
         $this->output->writeln(
-            $this->formatter->formatBlock($message, $type, true)
+            $formatter->formatBlock($message, $type, true)
         );
     }
 }

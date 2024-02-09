@@ -32,13 +32,14 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 
-class AppKernel extends Kernel
+
+abstract class AppKernel extends Kernel
 {
     const VERSION = Version::VERSION;
     const MAJOR_VERSION_STRING = Version::MAJOR_VERSION_STRING;
-    const MAJOR_VERSION = 8;
-    const MINOR_VERSION = 1;
-    const RELEASE_VERSION = 3;
+    const MAJOR_VERSION = Version::MAJOR_VERSION;
+    const MINOR_VERSION = Version::MINOR_VERSION;
+    const RELEASE_VERSION = Version::RELEASE_VERSION;
 
     /**
      * Lock stream is saved as static field, this way if multiple AppKernel are instanciated (this can happen in
@@ -49,25 +50,29 @@ class AppKernel extends Kernel
     protected static $lockStream = null;
 
     /**
+     * @var ModuleRepository
+     */
+    protected $moduleRepository = null;
+
+    /**
      * {@inheritdoc}
      */
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
-            new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new ApiPlatform\Symfony\Bundle\ApiPlatformBundle(),
             // PrestaShop Core bundle
-            new PrestaShopBundle\PrestaShopBundle(),
+            new PrestaShopBundle\PrestaShopBundle($this),
             // PrestaShop Translation parser
             new TranslationToolsBundle(),
-            new League\Tactician\Bundle\TacticianBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
+            new Symfony\UX\TwigComponent\TwigComponentBundle(),
+            new Twig\Extra\TwigExtraBundle\TwigExtraBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
@@ -76,10 +81,10 @@ class AppKernel extends Kernel
         }
 
         /* Will not work until PrestaShop is installed */
-        $activeModules = $this->getActiveModules();
-        if (!empty($activeModules)) {
+        $installedModules = $this->getModuleRepository()->getInstalledModules();
+        if (!empty($installedModules)) {
             try {
-                $this->enableComposerAutoloaderOnModules($activeModules);
+                $this->enableComposerAutoloaderOnModules($installedModules);
             } catch (\Exception $e) {
             }
         }
@@ -164,19 +169,6 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    protected function getKernelParameters()
-    {
-        $kernelParameters = parent::getKernelParameters();
-
-        return array_merge(
-            $kernelParameters,
-            array('kernel.active_modules' => $this->getActiveModules())
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getRootDir()
     {
         return __DIR__;
@@ -185,7 +177,7 @@ class AppKernel extends Kernel
     /**
      * {@inheritdoc}
      */
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return dirname(__DIR__) . '/var/logs';
     }
@@ -197,24 +189,44 @@ class AppKernel extends Kernel
      */
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load(function (ContainerBuilder $container) {
-            $container->setParameter('container.autowiring.strict_mode', true);
-            $container->setParameter('container.dumper.inline_class_loader', false);
-            $container->addObjectResource($this);
-        });
-
         $loader->load($this->getRootDir() . '/config/config_' . $this->getEnvironment() . '.yml');
 
-        // Add translation paths to load into the translator. The paths are loaded by the Symfony's FrameworkExtension
-        $loader->load(function (ContainerBuilder $container) {
-            /** @var array $moduleTranslationsPaths */
-            $moduleTranslationsPaths = $container->getParameter('modules_translation_paths');
-            foreach ($this->getActiveModules() as $activeModulePath) {
-                $translationsDir = _PS_MODULE_DIR_ . $activeModulePath . '/translations';
-                if (is_dir($translationsDir)) {
-                    $moduleTranslationsPaths[] = $translationsDir;
+        $activeModules = $this->getModuleRepository()->getActiveModules();
+        // We only load translations and services of active modules (not simply installed)
+        $moduleTranslationsPaths = [];
+        foreach ($activeModules as $activeModulePath)
+        {
+            $modulePath = _PS_MODULE_DIR_ . $activeModulePath;
+            $translationsPath = sprintf('%s/translations', $modulePath);
+
+            $configFiles = [
+                sprintf('%s/config/services.yml', $modulePath),
+                sprintf('%s/config/admin/services.yml', $modulePath),
+                // @todo Uncomment to Load this file once we'll have a unique container
+                // sprintf('%s/config/front/services.yml', $modulePath),
+            ];
+
+            foreach ($configFiles as $file) {
+                if(is_file($file)) {
+                    $loader->load($file);
                 }
             }
+
+            if (is_dir($translationsPath)) {
+                $moduleTranslationsPaths[] = $translationsPath;
+            }
+        }
+
+        $installedModules = $this->getModuleRepository()->getInstalledModules();
+        $loader->load(function (ContainerBuilder $container) use ($moduleTranslationsPaths, $activeModules, $installedModules) {
+            $container->setParameter('container.autowiring.strict_mode', true);
+            $container->setParameter('container.dumper.inline_class_loader', false);
+            $container->setParameter('prestashop.module_dir', _PS_MODULE_DIR_);
+            /** @deprecated kernel.active_modules is deprecated. Use prestashop.active_modules instead. */
+            $container->setParameter('kernel.active_modules', $activeModules);
+            $container->setParameter('prestashop.active_modules', $activeModules);
+            $container->setParameter('prestashop.installed_modules', $installedModules);
+            $container->addObjectResource($this);
             $container->setParameter('modules_translation_paths', $moduleTranslationsPaths);
         });
     }
@@ -248,22 +260,18 @@ class AppKernel extends Kernel
      *
      * @return string The project root dir
      */
-    public function getProjectDir()
+    public function getProjectDir(): string
     {
         return realpath(__DIR__ . '/..');
     }
 
-    private function getActiveModules(): array
+    protected function getModuleRepository(): ModuleRepository
     {
-        $activeModules = [];
-        try {
-            $activeModules = (new ModuleRepository(_PS_ROOT_DIR_, _PS_MODULE_DIR_))->getActiveModules();
-        } catch (\Exception $e) {
-            //Do nothing because the modules retrieval must not block the kernel, and it won't work
-            //during the installation process
+        if ($this->moduleRepository === null) {
+            $this->moduleRepository = new ModuleRepository(_PS_ROOT_DIR_, _PS_MODULE_DIR_);
         }
 
-        return $activeModules;
+        return $this->moduleRepository;
     }
 
     protected function getContainerClearCacheLockPath(): string
@@ -317,4 +325,14 @@ class AppKernel extends Kernel
             unlink($clearCacheLockPath);
         }
     }
+
+    /**
+     * Get App type of current Kernel based on kernel class name. (admin or front)
+     *
+     * @return string
+     */
+     public function getAppType(): string
+     {
+         return $this instanceof \AdminKernel ? 'admin' : 'front';
+     }
 }
