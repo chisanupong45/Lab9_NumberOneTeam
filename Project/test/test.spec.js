@@ -2,7 +2,40 @@
 const { test, expect } = require('@playwright/test');
 const path = require('path');
 
-test('US01 : TC01 | ทำการกด add เพิ่มเพิ่ม Voucherในตะกร้า ', async ({ page }) => {
+test('US01 : TC01 | ซื้อบัตรกำนัล', async ({ page}) => {
+  await page.goto('http://localhost:8080/th/');
+  await page.locator('article').filter({ hasText: ' เปิดหน้าต่างย่อ บัตรกำนัล ฿100.00 ใหม่ favorite_border' }).getByRole('link').first().click();
+  await page.getByRole('button', { name: ' หยิบใส่ตะกร้า' }).click();
+  await page.getByRole('link', { name: ' ทำรายการชำระเงิน' }).click();
+  await page.getByRole('link', { name: 'ทำรายการชำระเงิน' }).click();
+  await page.getByLabel('Mrs.').check();
+  await page.getByLabel('ชื่อ').click();
+  await page.getByLabel('ชื่อ').fill('Momo');
+  await page.getByLabel('นามสกุล').click();
+  await page.getByLabel('นามสกุล').fill('Sakura');
+  await page.getByLabel('อีเมลล์').click();
+  await page.getByLabel('อีเมลล์').fill('Email@gmail.com');
+  await page.getByRole('button', { name: 'ทำต่อ' }).click();
+  await page.getByLabel('ประเทศ').selectOption('204');
+  await page.getByLabel('หมายเลขประจำตัวผู้เสียภาษี').click();
+  await page.getByLabel('หมายเลขประจำตัวผู้เสียภาษี').fill('123456789');
+  await page.getByLabel('ที่อยู่', { exact: true }).click();
+  await page.getByLabel('ที่อยู่', { exact: true }).fill('kkthai');
+  await page.getByLabel('รหัสไปรษณีย์').click();
+  await page.getByLabel('รหัสไปรษณีย์').fill('40002');
+  await page.getByLabel('จังหวัด').click();
+  await page.getByLabel('จังหวัด').fill('Khon Kaen');
+  await page.getByLabel('โทรศัพท์').click();
+  await page.getByLabel('โทรศัพท์').fill('123-456-7890');
+  await page.getByRole('button', { name: 'ทำต่อ' }).click();
+  await page.getByText('ชำระผ่านพร้อมเพย์').click();
+  const slip = path.join(__dirname, '/slip.jpg');
+  await page.getByRole('textbox').setInputFiles(slip);
+  await page.click('#promptPayForm > button');
+  await expect(page.locator('#content-hook_payment_return > div > div > div > div.alert.alert-success')).toContainText('ชำระด้วยพร้อมเพย์สำเร็จ');
+});
+
+test('US02 : TC02 | ทำการกด add เพิ่มเพิ่ม Voucherในตะกร้า ', async ({ page }) => {
   await page.goto('http://localhost:8080/th/');
 
   await page.click('#content > section:nth-child(2) > div > div:nth-child(1) > article > div > div.product-description > h3 > a');
@@ -14,7 +47,7 @@ test('US01 : TC01 | ทำการกด add เพิ่มเพิ่ม Vou
 });
 
 
-test('US02 : TC02 | ทำการกด ลบ เพิ่ม Voucher ในตะกร้า ', async ({ page }) => {
+test('US02 : TC03 | ทำการกด ลบ เพิ่ม Voucher ในตะกร้า ', async ({ page }) => {
   await page.goto('http://localhost:8080/th/');
 
   await page.click('#content > section:nth-child(2) > div > div:nth-child(1) > article > div > div.product-description > h3 > a');
