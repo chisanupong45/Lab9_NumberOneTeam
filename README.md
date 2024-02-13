@@ -2,6 +2,8 @@
 
 Docker Hub: https://hub.docker.com/repository/docker/chisanupongkku/prestashop-sp2
 
+ADAPT Blueprint : https://miro.com/app/board/uXjVN9zxQ5c=/
+
 # คู่มือการติดตั้งโปรเจค NumberOneTeam
 
 คู่มือนี้จะแนะนำขั้นตอนในการติดตั้งโปรเจค NumberOneTeam ในเครื่องของคุณโดยใช้ Docker Compose โปรดปฏิบัติตามคำแนะนำด้านล่างเพื่อเริ่มต้น
