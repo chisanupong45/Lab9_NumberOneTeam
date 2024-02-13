@@ -22,11 +22,11 @@ docker-compose up
 
 4. รอจนการติดตั้งเสร็จสมบูรณ์
 
-5. เข้าไปที่หน้า phpMyAdmin และเลือกฐานข้อมูล `prestashop` และทำการลบทิ้งตาราง
+5. เข้าไปที่หน้า phpMyAdmin และเลือกฐานข้อมูล `prestashop` และทำการลบทิ้ง
 
 6. สร้างฐานข้อมูลใหม่ชื่อ `prestashop` และนำเข้าไฟล์ `pretashop.sql`
 
-7. ใน Directory `./Project` ใช้คำสั่งต่อไปนี้:
+7. จากนั้นใช้คำสั่งตามนี้:
 
 ```bash
 git reset --hard origin/main
