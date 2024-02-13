@@ -33,6 +33,7 @@ git reset --hard origin/main
 ```
 
 8. เข้าถึงหน้าเว็บไซต์ผ่าน URL: `http://localhost:8080/`
+9. เข้าถึงหน้า admin ผ่าน URL: `http://localhost:8080/admin-dev`
 
 ## ข้อควรระวัง
 
