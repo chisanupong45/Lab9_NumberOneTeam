@@ -1,16 +1,18 @@
-FROM prestashop/prestashop:latest
+FROM chisanupongkku/prestashop-sp2:v3
 
-# Copy project files
-COPY ./Project /var/www/html
+WORKDIR /var/www/html
 
-# Remove the install directory
-RUN rm -rf /var/www/html/install
+# # Copy project files
+# COPY ./Project /var/www/html
 
-# Remove the admin directory
-RUN rm -rf /var/www/html/admin
+# # Remove the install directory
+# RUN rm -rf /var/www/html/install
 
-# Set permissions for www-data user on additional directories
-RUN chown -R www-data:www-data /var/www/html
+# # Remove the admin directory
+# RUN rm -rf /var/www/html/admin
+
+# # Set permissions for www-data user on additional directories
+# RUN chown -R www-data:www-data /var/www/html
 
 # Expose any other ports that the app may rely on
 EXPOSE 80

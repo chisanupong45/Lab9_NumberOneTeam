@@ -13,7 +13,7 @@ services:
       - ./dbdata:/var/lib/mysql
   prestashop:
     container_name: prestashop
-    image: chisanupongkku/prestashop-sp2:v3
+    image: chisanupongkku/prestashop-sp3:latest
     restart: unless-stopped
     depends_on:
       - db
@@ -39,6 +39,13 @@ services:
       ADMIN_PASSWD: ${ADMIN_PASSWD:-admin12345678}
     networks:
       - prestashop_network
+    volumes:
+      # - ./Project/var/www/html
+      - ./Project/classes/:/var/www/html/classes
+      - ./Project/modules/:/var/www/html/modules
+      - ./Project/themes/:/var/www/html/themes
+      - ./Project/img/:/var/www/html/img
+      - ./Project/controllers/:/var/www/html/controllers
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin
