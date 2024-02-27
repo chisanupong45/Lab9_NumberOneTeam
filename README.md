@@ -4,7 +4,7 @@ Docker Hub: https://hub.docker.com/repository/docker/chisanupongkku/prestashop-s
 
 ADAPT Blueprint : https://miro.com/app/board/uXjVN9zxQ5c=/
 
-# Installation Guide for the NumberOneTeam Project
+# Installation Guide for the Project
 
 This guide will walk you through the steps to install the NumberOneTeam project on your machine using Docker Compose. Please follow the instructions below to get started.
 
@@ -43,4 +43,4 @@ This guide will walk you through the steps to install the NumberOneTeam project 
 - Make sure that ports 8080 and 8081 are not being used by other services on your machine.
 - If you encounter any problems during installation, please read the project documentation or ask for help from the project administrator.
 
-That's it! You should now have the NumberOneTeam project installed and running correctly on your machine!
+That's it! You should now have the project installed and running correctly on your machine!
