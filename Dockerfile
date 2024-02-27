@@ -1,9 +1,9 @@
-FROM chisanupongkku/prestashop-sp2:v3
+FROM chisanupongkku/prestashop-sp3:latest
 
 WORKDIR /var/www/html
 
 # # Copy project files
-# COPY ./Project /var/www/html
+COPY ./Project /var/www/html
 
 # # Remove the install directory
 # RUN rm -rf /var/www/html/install
@@ -12,7 +12,7 @@ WORKDIR /var/www/html
 # RUN rm -rf /var/www/html/admin
 
 # # Set permissions for www-data user on additional directories
-# RUN chown -R www-data:www-data /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 # Expose any other ports that the app may rely on
 EXPOSE 80
