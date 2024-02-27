@@ -10,6 +10,10 @@
 <p>ชื่อ: วิทยาลัยการคอมพิวเตอร์</p>
 <p>หมายเลขบัญชี: 1-122-334-4556-6</p>
 <p>ธนาคารกสิกร สาขาโลตัสโนนม่วง</p>
+<p>หรือสแกนข้างล่างนี้</p>
+<p>
+    <img src="https://www.i-pic.info/i/otGF652298.png" alt="QR Code" style="width: 300px; height: auto;">
+</p>
 <p>เมื่อทำรายการเรียบร้อย กรุณาแนบสลิปข้างล่างนี้</p>
 
 <form id="bankPaymentForm" action="{$link->getModuleLink('custombankpayment', 'validation', [], true)}" method="post" enctype="multipart/form-data">

@@ -18,7 +18,7 @@
                     {if $order.details.invoice_url}
                     {* [1][/1] is for a HTML tag. *}
                     {l
-                    s='You can also [1]download your invoice[/1]'
+                    s='คุณสามารถ[1]ดาวน์โหลดใบกำกับภาษีได้ที่นี่[/1]'
                     d='Shop.Theme.Checkout'
                     sprintf=[
                     '[1]' => "<a href='{$order.details.invoice_url}'>",

@@ -2,7 +2,7 @@
 <p>หมายเลขพร้อมเพย์: 0987654321 </p>
 <p>หรือสแกนข้างล่างนี้</p>
 <p>
-    <img src="https://www.i-pic.info/i/otGF652298.png" alt="QR Code" style="width: 300px; height: auto;">
+    <img src="https://img2.pic.in.th/pic/img-promptpay.png" alt="QR Code" style="width: 300px; height: auto;">
 </p>
 <p>เมื่อทำรายการเรียบร้อย กรุณาแนบสลิปข้างล่างนี้</p>
 
