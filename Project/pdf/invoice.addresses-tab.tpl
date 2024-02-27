@@ -24,12 +24,23 @@
  *}
 <table id="addresses-tab" cellspacing="0" cellpadding="0">
 	<tr>
-		<td width="50%">{if $delivery_address}<span class="bold">{l s='Delivery address' d='Shop.Pdf' pdf='true'}</span><br/><br/>
-				{$delivery_address}
-			{/if}
-		</td>
-		<td width="50%"><span class="bold">{l s='Billing address' d='Shop.Pdf' pdf='true'}</span><br/><br/>
-				{$invoice_address}
+	<br />
+	<br />
+		<td width="100%"><span class="bold" style="font-size: 14px;">{l s='ข้อมูลผู้ขาย'}</span><br/><br/>
+			<strong>ชื่อผู้ขาย:</strong> วิทยาลัยการคอมพิวเตอร์<br/>
+			<strong>ที่อยู่:</strong> เลขที่ 123 หมู่ 16 ถนนมิตรภาพ ตำบลในเมือง อำเภอเมืองขอนแก่น จังหวัดขอนแก่น 40002<br/>
+			<strong>หมายเลขผู้เสียภาษี:</strong> 1234567890123<br/>
+			<strong>โทรศัพท์:</strong> 043-009700
 		</td>
 	</tr>
+	<br />
+	<br />
+	<tr>
+		<td width="100%"><span class="bold" style="font-size: 14px;">{l s='ข้อมูลผู้ซื้อ' d='Shop.Pdf' pdf='true'}</span><br/><br/>
+			<strong>ชื่อผู้ซื้อ:</strong> {$addresses.invoice->firstname} {$addresses.invoice->lastname}<br/>
+			<strong>ที่อยู่:</strong> {$addresses.invoice->address1} {$addresses.invoice->city} {$addresses.invoice->postcode}<br/>
+			<strong>หมายเลขผู้เสียภาษี:</strong> {$addresses.invoice->vat_number}<br/>
+			<strong>โทรศัพท์:</strong> {$addresses.invoice->phone}
+		</td>
+	</td>
 </table>

@@ -29,7 +29,7 @@
  */
 class PDFGeneratorCore extends TCPDF
 {
-    public const DEFAULT_FONT = 'helvetica';
+    public const DEFAULT_FONT = 'freeserif';
 
     /**
      * @var string
@@ -66,7 +66,7 @@ class PDFGeneratorCore extends TCPDF
         'uk' => 'freeserif',
         'mk' => 'freeserif',
         'el' => 'freeserif',
-        'en' => 'dejavusans',
+        'en' => 'freeserif',
         'vn' => 'dejavusans',
         'pl' => 'dejavusans',
         'ar' => 'dejavusans',

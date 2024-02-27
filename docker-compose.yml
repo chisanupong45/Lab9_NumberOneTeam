@@ -46,6 +46,7 @@ services:
       - ./Project/themes/:/var/www/html/themes
       - ./Project/img/:/var/www/html/img
       - ./Project/controllers/:/var/www/html/controllers
+      - ./Project/pdf/:/var/www/html/pdf
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin

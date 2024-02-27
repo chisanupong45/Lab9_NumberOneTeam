@@ -34,6 +34,7 @@ class CheckoutDeliveryStepCore extends AbstractCheckoutStep
     private $giftCost = 0;
     private $includeTaxes = false;
     private $displayTaxesLabel = false;
+    private $invoiceCheckValue = true;
 
     public function setRecyclablePackAllowed($recyclablePackAllowed)
     {

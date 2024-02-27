@@ -47,6 +47,14 @@ class CheckoutAddressesStepCore extends AbstractCheckoutStep
     ) {
         parent::__construct($context, $translator);
         $this->addressForm = $addressForm;
+        // Get the current context
+    $context = Context::getContext();
+
+    // Get the current customer
+    $customer = $context->customer;
+
+    // Pass the first name to the template
+    $this->context->smarty->assign('customerFirstName', $customer->firstname);
     }
 
     public function getDataToPersist()
@@ -67,7 +75,12 @@ class CheckoutAddressesStepCore extends AbstractCheckoutStep
 
     public function handleRequest(array $requestParams = [])
     {
-        $this->addressForm->setAction($this->getCheckoutSession()->getCheckoutURL());
+        if ($this->getCheckoutSession()->getCustomer()->firstname === '') {
+            $this->setComplete(true);
+            $this->setNextStepAsCurrent();
+            $this->setTitle($this->getTranslator()->trans('Addresses', [], 'Shop.Theme.Checkout'));
+            return $this;
+        }
 
         if (array_key_exists('use_same_address', $requestParams)) {
             $this->use_same_address = (bool) $requestParams['use_same_address'];

@@ -34,15 +34,17 @@ class CustomBankPaymentValidationModuleFrontController extends ModuleFrontContro
                     return;
                 } else {
                     $this->errors[] = $this->module->l('Invalid file. Please upload a valid payment slip.');
+                    $this->context->smarty->assign('paymentFail', true);
                 }
             } else {
                 $this->errors[] = $this->module->l('Please upload a payment slip.');
+                $this->context->smarty->assign('noUploadSlip', true);
             }
         }
 
         // Set the template for displaying errors
-        //$this->setTemplate('module:custombankpayment/views/templates/front/payment_form.tpl');
-        Tools::redirect('index.php?controller=order&step=3');
+        $this->setTemplate('module:custombankpayment/views/templates/front/payment_fail.tpl');
+        //Tools::redirect('index.php?controller=order&step=3');
     }
 
     // Function to validate the uploaded file

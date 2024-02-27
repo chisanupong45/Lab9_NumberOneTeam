@@ -59,6 +59,13 @@ class CheckoutPaymentStepCore extends AbstractCheckoutStep
 
     public function handleRequest(array $requestParams = [])
     {
+        $customerFirstName = $this->getCheckoutSession()->getCustomer()->firstname;
+        if (empty($customerFirstName)) {
+            $this->disablePreviousStep = true;
+        } else {
+            $this->disablePreviousStep = false;
+        }
+
         if (isset($requestParams['select_payment_option'])) {
             $this->selected_payment_option = $requestParams['select_payment_option'];
         }

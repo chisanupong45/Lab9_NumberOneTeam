@@ -2,7 +2,6 @@
 
 {block name='step_content'}
   {hook h='displayPersonalInformationTop' customer=$customer}
-
   {if $customer.is_logged && !$customer.is_guest}
 
     <p class="identity">
@@ -43,26 +42,9 @@
           {l s='Continue' d='Shop.Theme.Actions'}
         </button>
       </form>
-
     </div>
 
   {else}
-    <ul class="nav nav-inline my-2" role="tablist">
-      <li class="nav-item">
-        <a
-          class="nav-link {if !$show_login_form}active{/if}"
-          data-toggle="tab"
-          href="#checkout-guest-form"
-          role="tab"
-          aria-controls="checkout-guest-form"
-          {if !$show_login_form} aria-selected="true"{/if}
-          >
-          
-        </a>
-      </li>
-
-      
-    </ul>
 
     <div class="tab-content">
       <div class="tab-pane {if !$show_login_form}active{/if}" id="checkout-guest-form" role="tabpanel" {if $show_login_form}aria-hidden="true"{/if}>
@@ -72,7 +54,5 @@
         {render file='checkout/_partials/login-form.tpl' ui=$login_form}
       </div>
     </div>
-
-
   {/if}
 {/block}

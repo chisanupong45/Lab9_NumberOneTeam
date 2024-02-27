@@ -24,23 +24,24 @@
  *}
 
 
-<table style="width: 100%">
+<table style="width: 100%;">
 <tr>
-	<td style="width: 50%">
-		{if $logo_path}
-			<img src="{$logo_path}" style="width:{$width_logo}px; height:{$height_logo}px;" />
-		{/if}
+	<td style="width: 50%;">
+		<img src="https://upload.wikimedia.org/wikipedia/th/thumb/c/ce/Computing_KKU.svg/640px-Computing_KKU.svg.png" style="width:200px; height:auto;" />
 	</td>
 	<td style="width: 50%; text-align: right;">
-		<table style="width: 100%">
+		<br />
+		<br />
+		<br />
+		<table style="width: 100%;">
 			<tr>
-				<td style="font-weight: bold; font-size: 14pt; color: #444; width: 100%;">{if isset($header)}{$header|escape:'html':'UTF-8'|upper}{/if}</td>
+				<td style="font-weight: bold; font-size: 22pt; color: #000000; width: 100%;">ใบเสร็จรับเงิน / ใบกำกับภาษี</td>
 			</tr>
 			<tr>
-				<td style="font-size: 14pt; color: #9E9F9E">{$date|escape:'html':'UTF-8'}</td>
+				<td style="font-size: 14pt; color: #000000">วันที่ {$date|escape:'html':'UTF-8'}</td>
 			</tr>
 			<tr>
-				<td style="font-size: 14pt; color: #9E9F9E">{$title|escape:'html':'UTF-8'}</td>
+				<td style="font-size: 14pt; color: #000000">เลขที่ {$title|escape:'html':'UTF-8'}</td>
 			</tr>
 		</table>
 	</td>
